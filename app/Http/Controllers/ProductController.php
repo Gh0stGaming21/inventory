@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -43,28 +44,10 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         try {
-            $validated = $request->validate([
-                'name' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    Rule::unique('products', 'name')
-                ],
-                'description' => 'required|string|min:10',
-                'price' => 'required|numeric|min:0.01|regex:/^\\d+(\\.\\d{1,2})?$/',
-                'quantity' => 'required|integer|min:0|max:99999',
-                'category_id' => 'required|exists:categories,id',
-                'sku' => 'nullable|string|max:50|unique:products,sku',
-                'minimum_stock' => 'nullable|integer|min:0|max:99999'
-            ], [
-                'price.regex' => 'The price must have at most 2 decimal places.',
-                'name.unique' => 'This product name already exists.',
-                'description.min' => 'The description must be at least 10 characters.',
-                'quantity.max' => 'The quantity cannot exceed 99,999 units.'
-            ]);
+            $validated = $request->validated();
 
             DB::beginTransaction();
             
@@ -91,23 +74,10 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
         try {
-            $validated = $request->validate([
-                'name' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    Rule::unique('products', 'name')->ignore($product->id)
-                ],
-                'description' => 'required|string|min:10',
-                'price' => 'required|numeric|min:0.01|regex:/^\\d+(\\.\\d{1,2})?$/',
-                'quantity' => 'required|integer|min:0|max:99999',
-                'category_id' => 'required|exists:categories,id',
-                'sku' => ['nullable', 'string', 'max:50', Rule::unique('products', 'sku')->ignore($product->id)],
-                'minimum_stock' => 'nullable|integer|min:0|max:99999'
-            ]);
+            $validated = $request->validated();
 
             DB::beginTransaction();
             

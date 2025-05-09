@@ -29,7 +29,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('products.store') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('products.store') }}" method="POST" class="space-y-6" id="productForm">
                         @csrf
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -124,55 +124,60 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Price validation
-            const priceInput = document.getElementById('price');
-            priceInput.addEventListener('input', function(e) {
-                let value = e.target.value;
-                if (value.includes('.')) {
-                    let parts = value.split('.');
-                    if (parts[1].length > 2) {
-                        e.target.value = parseFloat(value).toFixed(2);
-                    }
-                }
+            // Initialize form validation
+            const productValidator = new FormValidator('productForm', {
+                validateOnInput: true,
+                validateOnBlur: true,
+                validateOnSubmit: true
+            });
+            
+            // Add validation rules for each field
+            productValidator
+                .addField('name', ValidationRules.validateProductName, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('description', ValidationRules.validateDescription, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('price', ValidationRules.validatePrice, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('quantity', ValidationRules.validateQuantity, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('category_id', (value) => {
+                    return value ? null : 'Please select a category';
+                }, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('sku', ValidationRules.validateSku, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                })
+                .addField('minimum_stock', (value) => {
+                    const quantity = document.getElementById('quantity').value;
+                    return ValidationRules.validateMinimumStock(value, quantity);
+                }, {
+                    errorClass: 'border-red-500',
+                    errorMessageClass: 'text-red-500 text-sm mt-1'
+                });
+
+            // Real-time validation for minimum stock when quantity changes
+            document.getElementById('quantity').addEventListener('input', function() {
+                productValidator.validateField('minimum_stock');
             });
 
-            // Form validation
-            const form = document.querySelector('form');
-            form.addEventListener('submit', function(e) {
-                let isValid = true;
-                const name = document.getElementById('name').value.trim();
-                const description = document.getElementById('description').value.trim();
-                const price = parseFloat(document.getElementById('price').value);
-                const quantity = parseInt(document.getElementById('quantity').value);
-                const category = document.getElementById('category_id').value;
-
-                if (name.length < 1) {
-                    isValid = false;
-                    alert('Product name is required');
-                }
-
-                if (description.length < 10) {
-                    isValid = false;
-                    alert('Description must be at least 10 characters long');
-                }
-
-                if (isNaN(price) || price <= 0) {
-                    isValid = false;
-                    alert('Please enter a valid price');
-                }
-
-                if (isNaN(quantity) || quantity < 0) {
-                    isValid = false;
-                    alert('Please enter a valid quantity');
-                }
-
-                if (!category) {
-                    isValid = false;
-                    alert('Please select a category');
-                }
-
-                if (!isValid) {
-                    e.preventDefault();
+            // Format price to have at most 2 decimal places
+            const priceInput = document.getElementById('price');
+            priceInput.addEventListener('blur', function() {
+                const value = priceInput.value.trim();
+                if (value && !isNaN(parseFloat(value))) {
+                    priceInput.value = parseFloat(value).toFixed(2);
                 }
             });
         });
