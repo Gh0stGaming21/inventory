@@ -6,8 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center">
-                        <x-application-logo class="block h-9 w-auto fill-current text-indigo-600" />
-                        <span class="ml-2 text-xl font-semibold text-gray-900">{{ config('app.name', 'Laravel') }}</span>
+                        <x-application-logo class="navbar-logo" />
                     </a>
                 </div>
 

@@ -18,10 +18,8 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
             <div class="flex flex-col items-center">
                 <a href="/" class="flex items-center">
-                    <x-application-logo class="w-16 h-16 fill-current text-indigo-600" />
-                    <span class="ml-3 text-2xl font-bold text-gray-900">{{ config('app.name', 'Laravel') }}</span>
+                    <x-application-logo class="auth-logo" />
                 </a>
-                <p class="mt-2 text-sm text-gray-600">Welcome to our platform</p>
             </div>
 
             <div class="w-full sm:max-w-md mt-8 px-6 py-8 bg-white shadow-xl overflow-hidden sm:rounded-xl">
