@@ -118,4 +118,51 @@ class ProductController extends Controller
             return back()->with('error', 'Failed to delete product. Please try again.');
         }
     }
+    
+    /**
+     * Update the quantity of a product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function updateQuantity(Request $request, Product $product)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:0',
+        ]);
+        
+        try {
+            DB::beginTransaction();
+            $product->quantity = $request->input('quantity');
+            $product->save();
+            DB::commit();
+            
+            // Return JSON response for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Quantity for {$product->name} updated successfully.",
+                    'newQuantity' => $product->quantity
+                ]);
+            }
+            
+            // Return redirect for form submissions
+            return redirect()->route('products.index')
+                ->with('success', "Quantity for {$product->name} updated successfully.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Return JSON error for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update quantity: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            // Return redirect with error for form submissions
+            return back()->with('error', 'Failed to update quantity. Please try again.');
+        }
+    }
 }

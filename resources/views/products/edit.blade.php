@@ -17,9 +17,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
-                <div class="mb-4 bg-red-50 text-red-700 p-4 rounded-lg">
-                    <div class="font-medium">Please fix the following errors:</div>
-                    <ul class="mt-3 list-disc list-inside text-sm">
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg">
+                    <ul class="list-disc pl-5">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -106,15 +105,11 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-end space-x-4 pt-4 border-t">
-                            <a href="{{ route('products.index') }}" 
-                                class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Cancel
-                            </a>
-                            <button type="submit" 
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <div class="flex items-center justify-between">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150">
                                 Update Product
                             </button>
+                            <a href="{{ route('products.index') }}" class="text-gray-600 hover:text-gray-800 font-medium">Cancel</a>
                         </div>
                     </form>
                 </div>

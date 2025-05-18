@@ -15,19 +15,20 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
-            <div class="flex flex-col items-center">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-[135deg] from-[#0369a1] via-[#0c4a6e] to-[#075985]">
+            <div class="flex flex-col items-center mb-6">
                 <a href="/" class="flex items-center">
-                    <x-application-logo class="auth-logo" />
+                    <x-application-logo class="auth-logo w-20 h-20 filter drop-shadow-lg" />
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-8 px-6 py-8 bg-white shadow-xl overflow-hidden sm:rounded-xl">
+            <div class="w-full sm:max-w-md mt-4 px-10 py-12 bg-white shadow-2xl overflow-hidden sm:rounded-2xl border border-[#38bdf8] relative">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0ea5e9] via-[#0284c7] to-[#0c4a6e]"></div>
                 {{ $slot }}
             </div>
             
-            <div class="mt-8 text-center text-sm text-gray-600">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
+            <div class="mt-8 text-center text-sm text-white">
+                &copy; {{ date('Y') }} {{ config('app.name', 'ShelfIQ') }}. All rights reserved.
             </div>
         </div>
     </body>

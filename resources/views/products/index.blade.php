@@ -35,13 +35,7 @@
                         </button>
                     </form>
                 </div>
-                <a href="{{ route('products.create') }}" 
-                    class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add New Product
-                </a>
+                <!-- Search button only -->
             </div>
 
             <div class="bg-white overflow-hidden shadow-xl rounded-lg">
@@ -77,19 +71,39 @@
                                             <span class="font-medium text-gray-900">${{ number_format($product->price, 2) }}</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                            @if($product->quantity > 20)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    {{ $product->quantity }} in stock
-                                                </span>
-                                            @elseif($product->quantity > 10)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    {{ $product->quantity }} in stock
-                                                </span>
-                                            @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                    {{ $product->quantity }} in stock
-                                                </span>
-                                            @endif
+                                            <div class="flex items-center justify-end space-x-1">
+                                                <form action="{{ route('products.update-quantity', $product) }}" method="POST" class="inline-flex items-center">
+                                                    @csrf
+                                                    <input type="hidden" name="quantity" value="{{ max(0, $product->quantity - 1) }}">
+                                                    <button type="submit" class="p-1 rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-150">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                                    </button>
+                                                </form>
+                                                
+                                                @if($product->quantity > 20)
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                        {{ $product->quantity }}
+                                                    </span>
+                                                @elseif($product->quantity > 10)
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                        {{ $product->quantity }}
+                                                    </span>
+                                                @else
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                        {{ $product->quantity }}
+                                                    </span>
+                                                @endif
+                                                
+                                                <form action="{{ route('products.update-quantity', $product) }}" method="POST" class="inline-flex items-center">
+                                                    @csrf
+                                                    <input type="hidden" name="quantity" value="{{ $product->quantity + 1 }}">
+                                                    <button type="submit" class="p-1 rounded-full text-green-600 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-150">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                    </button>
+                                                </form>
+                                                
+                                                <span class="text-xs text-gray-500 ml-1 hidden sm:inline">in stock</span>
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex justify-end space-x-3">
@@ -120,4 +134,5 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>

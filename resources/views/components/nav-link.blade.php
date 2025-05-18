@@ -2,10 +2,16 @@
 
 @php
 $classes = ($active ?? false)
-            ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-            : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out';
+            ? 'inline-flex items-center px-5 py-2.5 text-base font-medium text-white bg-gradient-to-r from-sky-600 to-sky-800 rounded-md shadow-md transition-all duration-150 ease-in-out'
+            : 'inline-flex items-center px-5 py-2.5 text-base font-medium text-white hover:bg-sky-800 hover:shadow-md rounded-md shadow-sm transition-all duration-150 ease-in-out';
 @endphp
 
+@if($active ?? false)
+<a {{ $attributes->merge(['class' => $classes . ' active-nav-link']) }}>
+    {{ $slot }}
+</a>
+@else
 <a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </a>
+@endif

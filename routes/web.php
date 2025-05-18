@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 
     // Product routes
     Route::resource('products', \App\Http\Controllers\ProductController::class);
+    Route::post('/products/{product}/update-quantity', [\App\Http\Controllers\ProductController::class, 'updateQuantity'])->name('products.update-quantity');
     
     // Category routes
     Route::resource('categories', \App\Http\Controllers\CategoryController::class);
